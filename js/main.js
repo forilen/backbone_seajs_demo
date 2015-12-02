@@ -9,7 +9,11 @@ $(document).ready(function(){
         },
         renderContent: function(){
             $("#content").append(this.render().el);
-        }
+        },
+        removeView: function() {
+            this.undelegateEvents();
+            this.remove();
+        },
     });
     var Page1View = BaseView.extend({
         template: _.template($("#template-page1").html()),
@@ -41,6 +45,7 @@ $(document).ready(function(){
     });
     var AppView = BaseView.extend({
         el: $(document),
+        views: [],
         initialize: function(){
             this.router = new Router;
         },
@@ -54,6 +59,21 @@ $(document).ready(function(){
                 trigger: true
             });
         },
+        setViews: function(views){
+            if(typeof views != 'object'){
+                return;
+            }
+            this.views = [];
+            var me = this;
+            $.each(views, function(index, view){
+                me.views.push(view);
+            });
+        },
+        removeViews: function(){
+            $.each(this.views, function(index, view){
+                view.removeView();
+            });
+        },
     });
     var Router = Backbone.Router.extend({
         routes: {
@@ -61,10 +81,14 @@ $(document).ready(function(){
             'page2': 'page2',
         },
         page1: function(){
+            appView.removeViews();
             page1View.init();
+            appView.setViews([page1View]);
         },
         page2: function(){
+            appView.removeViews();
             page2View.init();
+            appView.setViews([page2View]);
         },
     });
     var appView = new AppView;
