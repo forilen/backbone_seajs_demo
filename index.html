@@ -7,6 +7,35 @@
     <link rel="stylesheet" href="">
 </head>
 <body>
+    <script type="text/javascript" src="/plugins/seajs/sea.js"></script>
+    <script type="text/javascript">
+    seajs.config({
+        base: '/',
+        alias: {
+            //基础库
+            'jquery': 'plugins/jquery/jquery-2.1.4.min',
+            'underscore': 'plugins/underscore/underscore-1.8.3.min',
+            'backbone': 'plugins/backbone/backbone-1.2.3.min',
+            'main': 'js/main'
+        },
+        shim: {
+            'jquery': {
+                exports: '$',
+            },
+            'underscore': {
+                deps: ['jquery'],
+                exports: '_',
+            },
+            'backbone': {
+                deps: ['jquery', 'underscore'],
+                exports: 'Backbone',
+            }
+        }
+    });
+    seajs.use('main', function(app) {
+        app.run();
+    });
+    </script>
     <p>hello world</p>
     <a href="/page1" data-primary>page1</a>
     <a href="/page2" data-primary>page2</a>

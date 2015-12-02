@@ -1,4 +1,8 @@
-$(document).ready(function(){
+define('js/main', function(require, exports){
+    // var $ = require('jquery');
+    // var _ = require('underscore');
+    // var Backbone = require('backbone');
+    // debugger;
     var BaseView = Backbone.View.extend({
         initialize: function(){},
         init: function(){},
@@ -23,6 +27,9 @@ $(document).ready(function(){
         events: {},
         init: function(){
             this.renderContent();
+            require.async(['plugins/sweetalert/js/sweetalert.min'], function(){
+                alert('import sweetalert');
+            });
         },
         render: function(){
             this.$el.html(this.template({nav: 'xxx'}));
@@ -94,7 +101,17 @@ $(document).ready(function(){
     var appView = new AppView;
     var page1View = new Page1View;
     var page2View = new Page2View;
-    Backbone.history.start({
-        pushState: true
-    });
-});
+    //定义全局变量App
+    window.App = {
+        Models: {},
+        Views: {},
+        Collections: {},
+        initialize: function() {
+            Backbone.history.start({
+                pushState: true
+            });
+        }
+    };
+
+    exports.run = App.initialize;
+})
